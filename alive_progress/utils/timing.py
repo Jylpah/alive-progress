@@ -27,18 +27,21 @@ def fn_simple_eta(logic_total):
 
 elapsed_prev: float = 0.0
 total_prev: int = 0
+rate_prev: float = 0.0
 
 
 def calc_rate(total: int, elapsed: float) -> float:
     """
     Calculate periodic rate out of total values
     """
-    global elapsed_prev, total_prev
+    global elapsed_prev, total_prev, rate_prev
     time: float = elapsed - elapsed_prev
     change: int = total - total_prev
-    elapsed_prev = elapsed
-    total_prev = total
-    return change / time
+    if change > 3:
+        elapsed_prev = elapsed
+        total_prev = total
+        rate_prev = change / time
+    return rate_prev
 
 
 def gen_simple_exponential_smoothing(alfa, fn):
