@@ -13,8 +13,13 @@ from .configuration import config_handler
 from .hook_manager import buffered_hook_manager, passthrough_hook_manager
 from ..utils import terminal
 from ..utils.cells import combine_cells, fix_cells, print_cells, to_cells
-from ..utils.timing import elapsed_text, eta_text, fn_simple_eta, \
-    gen_simple_exponential_smoothing
+from ..utils.timing import (
+    elapsed_text,
+    eta_text,
+    fn_simple_eta,
+    gen_simple_exponential_smoothing,
+    calc_rate,
+)
 
 
 def alive_bar(total: Optional[int] = None, *, calibrate: Optional[int] = None, **options: Any):
@@ -231,9 +236,9 @@ def __alive_bar(config, total=None, *, calibrate=None,
 
     thread, event_renderer, cond_refresh = None, threading.Event(), _cond()
     bar_repr, bar_suffix = _create_bars(config)
-    fps = (custom_fps(config.refresh_secs) if config.refresh_secs
-           else calibrated_fps(calibrate or factor))
-    gen_rate = gen_simple_exponential_smoothing(.3, lambda pos, elapse: pos / elapse)
+    gen_rate = gen_simple_exponential_smoothing(
+        config.rate_alpha, lambda pos, elapse: calc_rate(pos, elapse)
+    )
     gen_rate.send(None)
 
     if config.disable:

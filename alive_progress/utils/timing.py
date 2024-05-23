@@ -25,6 +25,22 @@ def fn_simple_eta(logic_total):
     return simple_eta
 
 
+elapsed_prev: float = 0.0
+total_prev: int = 0
+
+
+def calc_rate(total: int, elapsed: float) -> float:
+    """
+    Calculate periodic rate out of total values
+    """
+    global elapsed_prev, total_prev
+    time: float = elapsed - elapsed_prev
+    change: int = total - total_prev
+    elapsed_prev = elapsed
+    total_prev = total
+    return change / time
+
+
 def gen_simple_exponential_smoothing(alfa, fn):
     """Implements a generator with a simple exponential smoothing of some function.
     Given alfa and y_hat (t-1), we can calculate the next y_hat:

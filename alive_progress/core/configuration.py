@@ -136,10 +136,13 @@ def _file_input_factory():
     return _input
 
 
-Config = namedtuple('Config', 'title length max_cols spinner bar unknown force_tty disable manual '
-                              'enrich_print receipt receipt_text monitor elapsed stats '
-                              'title_length spinner_length refresh_secs monitor_end elapsed_end '
-                              'stats_end ctrl_c dual_line unit scale precision file')
+Config = namedtuple(
+    "Config",
+    "title length max_cols spinner bar unknown force_tty disable manual "
+    "enrich_print receipt receipt_text monitor elapsed stats "
+    "title_length spinner_length refresh_secs monitor_end elapsed_end "
+    "stats_end ctrl_c dual_line unit scale precision file rate_alpha",
+)
 
 
 def create_config():
@@ -171,6 +174,7 @@ def create_config():
             unit='',
             scale=None,
             precision=1,
+            rate_alpha=0.3,
         )
 
     def set_global(theme=None, **options):
@@ -253,6 +257,7 @@ def create_config():
                                           10: 'SI', '10': 'SI',
                                           2: 'IEC', '2': 'IEC'}),
             precision=_int_input_factory(0, 2),
+            rate_alpha=_float_input_factory(0, 1),
         )
         assert all(k in validations for k in Config._fields)  # ensures all fields have validations.
 
