@@ -236,6 +236,11 @@ def __alive_bar(config, total=None, *, calibrate=None,
 
     thread, event_renderer, cond_refresh = None, threading.Event(), _cond()
     bar_repr, bar_suffix = _create_bars(config)
+    fps = (
+        custom_fps(config.refresh_secs)
+        if config.refresh_secs
+        else calibrated_fps(calibrate or factor)
+    )
     gen_rate = gen_simple_exponential_smoothing(
         config.rate_alpha, lambda pos, elapse: calc_rate(pos, elapse)
     )
