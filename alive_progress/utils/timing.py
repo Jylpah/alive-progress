@@ -37,10 +37,10 @@ def calc_rate(total: int, elapsed: float) -> float:
     global elapsed_prev, total_prev, rate_prev
     change: int = total - total_prev
     if change > 3:
-        time: float = elapsed - elapsed_prev
+        delta: float = elapsed - elapsed_prev
         elapsed_prev = elapsed
         total_prev = total
-        rate_prev = change / time
+        rate_prev = change / delta
     return rate_prev
 
 
